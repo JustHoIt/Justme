@@ -15,13 +15,12 @@ public class CustomException extends RuntimeException {
     private final int status;
     private static final ObjectMapper mapper = new ObjectMapper();
 
-    public CustomException(ErrorCode errorCode){
+    public CustomException(ErrorCode errorCode) {
         super();
         this.errorCode = errorCode;
         this.status = errorCode.getHttpStatus().value();
         this.message = errorCode.getMessage();
     }
-
 
     @Getter
     @Builder
