@@ -1,37 +1,39 @@
 package com.justyou.justme.service;
 
-import com.justyou.justme.dto.MemberDto;
+import com.justyou.justme.dto.LogInDto;
 import com.justyou.justme.dto.RequestMemberSignUpDto;
 import com.justyou.justme.dto.ResponseDto;
 import com.justyou.justme.exception.CustomException;
 import com.justyou.justme.exception.ErrorCode;
 import com.justyou.justme.model.entity.Member;
 import com.justyou.justme.model.repository.MemberRepository;
+import com.justyou.justme.security.TokenProvider;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
-import org.springframework.security.crypto.bcrypt.BCrypt;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
+@SpringBootTest
 class MemberServiceTest {
 
-    private MockMvc mockMvc;
 
     @InjectMocks
     private MemberService memberService;
@@ -39,6 +41,12 @@ class MemberServiceTest {
     private MemberRepository memberRepository;
     @Mock
     private ModelMapper modelMapper;
+
+    @InjectMocks
+    private TokenProvider tokenProvider;
+
+    @Spy
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @AfterEach
     public void afterEach() {
@@ -92,7 +100,7 @@ class MemberServiceTest {
     @Test
     @DisplayName("회원 가입 실패 - 중복 이메일")
     @Transactional
-    public void FAILED_SIGNUP_EXISTS_EMAIL(){
+    public void FAILED_SIGNUP_EXISTS_EMAIL() {
         //가상 데이터 생성
         RequestMemberSignUpDto dto = RequestMemberSignUpDto.builder()
                 .email("ppp@nana.com")
@@ -109,7 +117,7 @@ class MemberServiceTest {
         try {
             memberService.signUp(dto);
             fail("예외처리 발생하지 않음");
-        }catch (CustomException e){
+        } catch (CustomException e) {
             assertEquals(ErrorCode.ALREADY_REGISTERED_EMAIL, e.getErrorCode());
         }
     }
@@ -117,7 +125,7 @@ class MemberServiceTest {
     @Test
     @DisplayName("회워 가입 실패 - 중복 휴대폰 번호")
     @Transactional
-    public void FAILED_SIGNUP_EXISTS_PHONE(){
+    public void FAILED_SIGNUP_EXISTS_PHONE() {
         //가상 데이터 생성
         RequestMemberSignUpDto dto = RequestMemberSignUpDto.builder()
                 .email("ppp@nana.com")
@@ -135,8 +143,33 @@ class MemberServiceTest {
         try {
             memberService.signUp(dto);
             fail("예외처리 발생하지 않음");
-        }catch (CustomException e){
+        } catch (CustomException e) {
             assertEquals(ErrorCode.ALREADY_REGISTERED_PHONE, e.getErrorCode());
         }
     }
+
+    @Test
+    void LOGIN() {
+        String pw = bCryptPasswordEncoder.encode("password");
+
+        Member member = Member.builder()
+                .email("test@test.com")
+                .password(pw)
+                .name("박호민")
+                .phone("01012345678")
+                .birth(LocalDate.parse("1996-05-09"))
+                .userStatus("ING")
+                .build();
+
+        when(memberRepository.save(any(Member.class))).thenReturn(member);
+        when(memberRepository.findByEmail(member.getEmail())).thenReturn(Optional.of(member));
+
+        LogInDto logInDto = new LogInDto(member.getEmail(), "password");
+        memberRepository.save(member);
+        Member loginMember = memberService.authenticate(logInDto);
+
+        String token = tokenProvider.generateToken(loginMember.getEmail(), loginMember.getId());
+        assertNotNull(token);
+    }
+
 }
