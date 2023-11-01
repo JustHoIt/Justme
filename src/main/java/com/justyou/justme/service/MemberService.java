@@ -30,6 +30,7 @@ public class MemberService {
         if (this.memberRepository.existsByPhone(dto.getPhone())) {
             throw new CustomException(ErrorCode.ALREADY_REGISTERED_PHONE);
         }
+
         //데이터베이스에 비밀번호 암호화해서 저장
 //        String uuid = UUID.randomUUID().toString(); 이메일 인증 고민
         String encPassword = BCrypt.hashpw(dto.getPassword(), BCrypt.gensalt());
@@ -43,5 +44,15 @@ public class MemberService {
         responseDto.setResponseStatus("SUCCESS");
 
         return responseDto;
+    }
+
+    //휴대폰 번호 중복 체크
+    public boolean checkPhone(String phone) {
+        return this.memberRepository.existsByPhone(phone);
+    }
+
+    //이메일 중복 체크
+    public boolean checkEmail(String email) {
+        return this.memberRepository.existsByEmail(email);
     }
 }

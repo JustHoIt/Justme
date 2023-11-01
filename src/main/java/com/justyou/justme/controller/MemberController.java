@@ -8,10 +8,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -29,5 +26,17 @@ public class MemberController {
     public ResponseEntity<ResponseDto> signUp(@Valid @RequestBody RequestMemberSignUpDto memberSignUpRequest) {
         log.info(memberSignUpRequest.getEmail());
         return ResponseEntity.ok(this.memberService.signUp(memberSignUpRequest));
+    }
+
+    @ApiOperation(value = "휴대폰 중복 체크")
+    @GetMapping("/check/phone")
+    public ResponseEntity<Boolean> checkPhone(@RequestParam String phone){
+        return ResponseEntity.ok(this.memberService.checkPhone(phone));
+    }
+
+    @ApiOperation(value = "이메일 중복 체크")
+    @GetMapping("/check/phone")
+    public ResponseEntity<Boolean> checkEmail(@RequestParam String email){
+        return ResponseEntity.ok(this.memberService.checkEmail(email));
     }
 }
