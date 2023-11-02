@@ -38,12 +38,18 @@ public class Member extends BaseEntity {
     private String phone; //휴대폰번호
     @NotNull(message = "생년월일은 필수 입력 값 입니다.")
     private LocalDate birth;
-    private boolean emailAuth;
-    private LocalDateTime emailAuthDate;
-    private String emailAuthKey;
     private String userStatus; //회원상태
     private String address; //주소
     private int zipCode; //우편번호
+
+    //이메일 인증 관련 컬럼
+    private boolean emailAuth;
+    private LocalDateTime emailAuthDate;
+    private String emailAuthKey;
+
+    //비밀번호 변경 관련 컬럼
+    private String passwordChangeKey;
+    private LocalDateTime passwordChangeLimitDt;
 
     public static Member from(RequestMemberSignUpDto dto) {
         return Member.builder()

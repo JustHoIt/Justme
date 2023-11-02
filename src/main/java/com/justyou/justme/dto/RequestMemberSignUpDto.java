@@ -10,6 +10,7 @@ import javax.persistence.Column;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 import java.time.LocalDate;
 
 @Getter
@@ -29,6 +30,7 @@ public class RequestMemberSignUpDto {
     private String phone; //휴대폰번호
     @NotNull(message = "생년월일은 필수 입력 값 입니다.")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @Past(message = "생년월인은 오늘 날짜가 불가능합니다.")
     private LocalDate birth;
 
 
