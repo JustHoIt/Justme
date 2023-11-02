@@ -40,7 +40,7 @@ public class Member extends BaseEntity {
     private LocalDate birth;
     private String userStatus; //회원상태
     private String address; //주소
-    private int zipCode; //우편번호
+    private String zipCode; //우편번호
 
     //이메일 인증 관련 컬럼
     private boolean emailAuth;
@@ -60,6 +60,8 @@ public class Member extends BaseEntity {
                 .phone(dto.getPhone())
                 .userStatus(MEMBER_STATUS_REQ.getStatus())
                 .emailAuth(false)
+                .address(dto.getAddress())
+                .zipCode(dto.getZipCode())
                 .build();
     }
 

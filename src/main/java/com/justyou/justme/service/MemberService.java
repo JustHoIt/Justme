@@ -6,7 +6,9 @@ import com.justyou.justme.dto.*;
 import com.justyou.justme.exception.CustomException;
 import com.justyou.justme.exception.ErrorCode;
 import com.justyou.justme.model.entity.Member;
+import com.justyou.justme.model.entity.WithdrawalMember;
 import com.justyou.justme.model.repository.MemberRepository;
+import com.justyou.justme.model.repository.WithdrawalMemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -30,6 +32,7 @@ import static com.justyou.justme.UserCode.MemberCode.MEMBER_STATUS_ING;
 public class MemberService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
+    private final WithdrawalMemberRepository withdrawalMemberRepository;
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
 
@@ -116,10 +119,6 @@ public class MemberService implements UserDetailsService {
         if (member.getUserStatus().equals("REQ")) {
             throw new CustomException(ErrorCode.NOT_EMAIL_AUTHENTICATE_USER);
         }
-        if (member.getUserStatus().equals("WITHDRAW")) {
-            throw new CustomException(ErrorCode.WITHDRAW_USER);
-        }
-
         return member;
     }
 
@@ -144,7 +143,6 @@ public class MemberService implements UserDetailsService {
 
         memberRepository.save(member);
         boolean result = mailComponent.changePasswordAuthSender(member);
-        /*이메일 인증으로 구현 */
         //조회성공시  true 전달하기
         long stopTime = System.currentTimeMillis();
         log.info("Service 동작 걸린시간 : " + (stopTime - startTime) + " | 이메일 발송 결과 : " + result);
@@ -154,12 +152,12 @@ public class MemberService implements UserDetailsService {
     //비밀번호 변경
     public ResponseDto changePassword(RequestNewPasswordDto form) {
         Optional<Member> optionalMember = memberRepository.findByPasswordChangeKey(form.getUUID());
-
+        //유저 정보 없으면 예외처리
         if (optionalMember.isEmpty()) {
             throw new CustomException(ErrorCode.NOT_FOUND_USER);
         }
         Member member = optionalMember.get();
-
+        // 변경 기간이 지났거나 존재하지 않을때 예외처리
         if (member.getPasswordChangeLimitDt() == null) {
             throw new CustomException(ErrorCode.NOT_VALID_DATE);
         }
@@ -173,8 +171,37 @@ public class MemberService implements UserDetailsService {
         member.setPasswordChangeLimitDt(null);
         memberRepository.save(member);
 
+        //최소정보 Dto 담아서 보내기
         ResponseDto responseDto = modelMapper.map(member, ResponseDto.class);
         responseDto.setMessage("비밀번호 변경이 완료되었습니다.");
+        responseDto.setResponseStatus("SUCCESS");
+
+        return responseDto;
+    }
+
+    public MemberDto getUserInfo(UserDto user) {
+        Member member = memberRepository.findById(user.getId())
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
+        return modelMapper.map(member, MemberDto.class);
+    }
+
+    public ResponseDto deleteUser(UserDto user) {
+        Optional<Member> optionalMember = memberRepository.findById(user.getId());
+        if (optionalMember.isEmpty()) {
+            throw new CustomException(ErrorCode.NOT_FOUND_USER);
+        }
+        /*회원탈퇴 시나리오
+         * 회원탈퇴를 하더라도 최소의 정보는 남겨두기 위해서 탈퇴회원 Entity 를 만들어서 정보를 이관 후 관리
+         * 나머지 정보는 전부 삭제*/
+        Member member = optionalMember.get();
+        WithdrawalMemberDto withdrawalMemberDto = WithdrawalMemberDto.from(member);
+        WithdrawalMember withdrawalMember = WithdrawalMember.from(withdrawalMemberDto);
+        withdrawalMember = withdrawalMemberRepository.save(withdrawalMember);
+
+        memberRepository.deleteById(member.getId());
+
+        ResponseDto responseDto = modelMapper.map(withdrawalMember, ResponseDto.class);
+        responseDto.setMessage("회원탈퇴가 성공적으로 이루어졌습니다.");
         responseDto.setResponseStatus("SUCCESS");
 
         return responseDto;
