@@ -33,7 +33,6 @@ public class RequestMemberSignUpDto {
     @Past(message = "생년월인은 오늘 날짜가 불가능합니다.")
     private LocalDate birth;
 
-
     private String address; //주소
-    private int zipCode; //우편번호
+    private String zipCode; //우편번호
 }

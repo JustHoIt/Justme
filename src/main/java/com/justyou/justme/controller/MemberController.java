@@ -67,5 +67,16 @@ public class MemberController {
         return ResponseEntity.ok(this.memberService.changePassword(form));
     }
 
+    @ApiOperation(value = "회원정보 조회")
+    @GetMapping("/info")
+    public ResponseEntity<MemberDto> getUserInfo(@RequestHeader(name = "auth-token") String token) {
+        return ResponseEntity.ok(memberService.getUserInfo(tokenProvider.getUser(token)));
+    }
+
+    @ApiOperation(value = "회원탈퇴")
+    @DeleteMapping("/withdraw")
+    public ResponseEntity<?> deleteUser(@RequestHeader(name = "auth-token") String token) {
+        return ResponseEntity.ok(memberService.deleteUser(tokenProvider.getUser(token)));
+    }
 
 }
