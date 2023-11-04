@@ -62,7 +62,7 @@ class MemberServiceTest {
         given(modelMapper.map(any(), any())).willReturn(ResponseUserDto.builder()
                 .email("ppp@nana.com")
                 .name("박호민")
-                .message("회원가입이 성공적으로 완료되었습니다.")
+                .message("회원가입을 성공했습니다.")
                 .responseStatus("SUCCESS")
                 .build());
 
@@ -80,7 +80,7 @@ class MemberServiceTest {
         assertNotNull(responseUserDto);
         assertEquals("ppp@nana.com", responseUserDto.getEmail());
         assertEquals("박호민", responseUserDto.getName());
-        assertEquals("회원가입이 성공적으로 완료되었습니다.", responseUserDto.getMessage());
+        assertEquals("회원가입을 성공했습니다.", responseUserDto.getMessage());
         assertEquals("SUCCESS", responseUserDto.getResponseStatus());
     }
 
