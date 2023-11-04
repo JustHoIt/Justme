@@ -59,7 +59,7 @@ class MemberServiceTest {
         //given
         given(memberRepository.existsByEmail(any())).willReturn(false);
         given(memberRepository.existsByEmail(any())).willReturn(false);
-        given(modelMapper.map(any(), any())).willReturn(ResponseDto.builder()
+        given(modelMapper.map(any(), any())).willReturn(ResponseUserDto.builder()
                 .email("ppp@nana.com")
                 .name("박호민")
                 .message("회원가입이 성공적으로 완료되었습니다.")
@@ -68,7 +68,7 @@ class MemberServiceTest {
 
         //when
         // 테스트 메소드 호출
-        ResponseDto responseDto = memberService.signUp(RequestMemberSignUpDto.builder()
+        ResponseUserDto responseUserDto = memberService.signUp(RequestMemberSignUpDto.builder()
                 .email("ppp@nana.com")
                 .password("password")
                 .birth(LocalDate.parse("1996-05-09"))
@@ -77,11 +77,11 @@ class MemberServiceTest {
                 .build());
 
         //then
-        assertNotNull(responseDto);
-        assertEquals("ppp@nana.com", responseDto.getEmail());
-        assertEquals("박호민", responseDto.getName());
-        assertEquals("회원가입이 성공적으로 완료되었습니다.", responseDto.getMessage());
-        assertEquals("SUCCESS", responseDto.getResponseStatus());
+        assertNotNull(responseUserDto);
+        assertEquals("ppp@nana.com", responseUserDto.getEmail());
+        assertEquals("박호민", responseUserDto.getName());
+        assertEquals("회원가입이 성공적으로 완료되었습니다.", responseUserDto.getMessage());
+        assertEquals("SUCCESS", responseUserDto.getResponseStatus());
     }
 
     @Test
@@ -191,19 +191,19 @@ class MemberServiceTest {
                 .userStatus(MEMBER_STATUS_ING.getStatus())
                 .build();
         given(memberRepository.findById(any())).willReturn(Optional.of(member));
-        given(modelMapper.map(any(), any())).willReturn(ResponseDto.builder()
+        given(modelMapper.map(any(), any())).willReturn(ResponseUserDto.builder()
                 .email("ppp@test.com")
                 .name("박호민")
                 .message("회원탈퇴가 성공적으로 이루어졌습니다.")
                 .responseStatus("SUCCESS")
                 .build());
         //when
-        ResponseDto responseDto = memberService.deleteUser(UserDto.builder()
+        ResponseUserDto responseUserDto = memberService.deleteUser(UserDto.builder()
                 .id(1L)
                 .email("ppp@test.com")
                 .build());
         //then
-        assertNotNull(responseDto);
+        assertNotNull(responseUserDto);
     }
 
     @Test

@@ -96,11 +96,11 @@ public class MemberService implements UserDetailsService {
         member.setUserStatus(MEMBER_STATUS_ING.getStatus());
         memberRepository.save(member);
 
-        ResponseUserDto responseDto = modelMapper.map(member, ResponseUserDto.class);
-        responseDto.setMessage("이메일 인증에 성공했습니다.");
-        responseDto.setResponseStatus("SUCCESS");
+        ResponseUserDto responseUserDto = modelMapper.map(member, ResponseUserDto.class);
+        responseUserDto.setMessage("이메일 인증에 성공했습니다.");
+        responseUserDto.setResponseStatus("SUCCESS");
 
-        return responseDto;
+        return responseUserDto;
     }
 
     //유저 로그인 인증
@@ -171,11 +171,11 @@ public class MemberService implements UserDetailsService {
         member.setPasswordChangeLimitDt(null);
         memberRepository.save(member);
 
-        ResponseUserDto responseDto = modelMapper.map(member, ResponseUserDto.class);
-        respons=ssage("비밀번호 변경을 성공했습니다.");
-        responseDto.setResponseStatus("SUCCESS");
+        ResponseUserDto responseUserDto = modelMapper.map(member, ResponseUserDto.class);
+        responseUserDto.setMessage("비밀번호 변경을 성공했습니다.");
+        responseUserDto.setResponseStatus("SUCCESS");
 
-        return responseDto;
+        return responseUserDto;
     }
 
     public MemberDto getUserInfo(UserDto user) {
@@ -184,7 +184,7 @@ public class MemberService implements UserDetailsService {
         return modelMapper.map(member, MemberDto.class);
     }
 
-    public ResponseDto deleteUser(UserDto user) {
+    public ResponseUserDto deleteUser(UserDto user) {
         Optional<Member> optionalMember = memberRepository.findById(user.getId());
         if (optionalMember.isEmpty()) {
             throw new CustomException(ErrorCode.NOT_FOUND_USER);
@@ -199,10 +199,10 @@ public class MemberService implements UserDetailsService {
 
         memberRepository.deleteById(member.getId());
 
-        ResponseDto responseDto = modelMapper.map(withdrawalMember, ResponseDto.class);
-        responseDto.setMessage("회원탈퇴가 성공적으로 이루어졌습니다.");
-        responseDto.setResponseStatus("SUCCESS");
+        ResponseUserDto responseUserDto = modelMapper.map(withdrawalMember, ResponseUserDto.class);
+        responseUserDto.setMessage("회원탈퇴가 성공적으로 이루어졌습니다.");
+        responseUserDto.setResponseStatus("SUCCESS");
 
-        return responseDto;
+        return responseUserDto;
     }
 }
