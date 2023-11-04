@@ -21,9 +21,9 @@ import static com.justyou.justme.UserCode.MemberCode.MEMBER_STATUS_REQ;
 @Getter
 @Setter
 @Builder
-@Entity(name = "MEMBER")
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity(name = "MEMBER")
 @AuditOverride(forClass = BaseEntity.class)
 public class Member extends BaseEntity {
     @Id
@@ -46,9 +46,7 @@ public class Member extends BaseEntity {
     private String zipCode; //우편번호
 
 
-    @JsonManagedReference
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "resume_id")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Resume> resumes;
 
     //이메일 인증 관련 컬럼

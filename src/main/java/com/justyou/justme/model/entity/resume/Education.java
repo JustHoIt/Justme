@@ -15,15 +15,13 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "EDUCATION")
-@AuditOverride(forClass = BaseEntity.class)
-public class Education extends BaseEntity {
+public class Education{
     //학력
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JsonBackReference
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "resume_id")
     private Resume resume;
 
@@ -33,8 +31,9 @@ public class Education extends BaseEntity {
     private String educationDepartment; //학과 , 계열
     private String educationEtc; //기타 내용
 
-    public static Education of(EducationDto dto){
+    public static Education of(EducationDto dto, Resume resume){
         return Education.builder()
+                .resume(resume)
                 .educationStartDt(dto.getEducationStartDt())
                 .educationEndDt(dto.getEducationEndDt())
                 .educationName(dto.getEducationName())

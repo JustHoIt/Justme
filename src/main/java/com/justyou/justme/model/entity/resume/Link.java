@@ -14,22 +14,21 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "LINK")
-@AuditOverride(forClass = BaseEntity.class)
-public class Link extends BaseEntity {
+public class Link  {
     //외부 링크
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @JsonBackReference
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "resume_id")
     private Resume resume;
     private String linkName; // 링크 명(ex. Google Drive)
     private String linkUrl; //링크 주소
 
 
-    public static Link of(LinkDto dto){
+    public static Link of(LinkDto dto, Resume resume){
         return Link.builder()
+                .resume(resume)
                 .linkName(dto.getLinkName())
                 .linkUrl(dto.getLinkUrl())
                 .build();

@@ -13,20 +13,21 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "ETC")
-public class Etc extends BaseEntity {
+public class Etc{
     //기타
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @JsonBackReference
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "resume_id")
     private Resume resume;
     private String etcTitle; //제목
     private String etcText; //내용
 
-    public static Etc of(EtcDto dto){
+    public static Etc of(EtcDto dto, Resume resume){
         return Etc.builder()
+                .resume(resume)
                 .etcTitle(dto.getEtcTitle())
                 .etcText(dto.getEtcText())
                 .build();

@@ -15,15 +15,13 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "AWARD")
-@AuditOverride(forClass = BaseEntity.class)
-public class Award extends BaseEntity {
+public class Award  {
     //수상
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JsonBackReference
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "resume_id")
     private Resume resume;
 
@@ -32,8 +30,9 @@ public class Award extends BaseEntity {
     private LocalDate awardDt; //수상일자
     private String awardText;//수상내역
 
-    public static Award of(AwardDto dto){
+    public static Award of(AwardDto dto, Resume resume){
         return Award.builder()
+                .resume(resume)
                 .awardTitle(dto.getAwardTitle())
                 .awardAgency(dto.getAwardAgency())
                 .awardDt(dto.getAwardDt())
