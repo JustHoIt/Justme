@@ -12,7 +12,7 @@ import java.util.List;
 @Setter
 @Builder
 public class ResumeDto {
-    private Member member;
+    private Long memberId;
     private String memberName; //작성자 이름
     private String memberEmail; //작성자 이메일
     private String memberPhone; //작성자 휴대폰 번호
@@ -28,5 +28,4 @@ public class ResumeDto {
     private List<TrainingCourseDto> trainingCourseDtoList;
     private List<EtcDto> etcDtoList;
     private List<LinkDto> linkDtoList;
-
 }

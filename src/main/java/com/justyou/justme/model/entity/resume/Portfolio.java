@@ -15,14 +15,13 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "PORTFOLIO")
-@AuditOverride(forClass = BaseEntity.class)
-public class Portfolio extends BaseEntity {
+public class Portfolio{
     //외부 링크
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @JsonBackReference
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "resume_id")
     private Resume resume;
     private String portfolioTitle; //제목
@@ -31,8 +30,9 @@ public class Portfolio extends BaseEntity {
     private String portfolioText; //내용
     //파일(?)
 
-    public static Portfolio of(PortfolioDto dto){
+    public static Portfolio of(PortfolioDto dto, Resume resume){
         return Portfolio.builder()
+                .resume(resume)
                 .portfolioTitle(dto.getPortfolioTitle())
                 .portfolioStartDt(dto.getPortfolioStartDt())
                 .portfolioEndDt(dto.getPortfolioEndDt())

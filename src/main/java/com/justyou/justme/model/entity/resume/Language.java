@@ -15,22 +15,22 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "LANGUAGE")
-@AuditOverride(forClass = BaseEntity.class)
-public class Language extends BaseEntity {
+public class Language {
     //외국어능력시험점수
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @JsonBackReference
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "resume_id")
     private Resume resume;
     private String languageName;//시험명
     private String languageScore;//점수
     private LocalDate languageAcquisitionDt;//취득일
 
-    public static Language of(LanguageDto dto){
+    public static Language of(LanguageDto dto, Resume resume){
         return Language.builder()
+                .resume(resume)
                 .languageName(dto.getLanguageName())
                 .languageScore(dto.getLanguageScore())
                 .languageAcquisitionDt(dto.getLanguageAcquisitionDt())

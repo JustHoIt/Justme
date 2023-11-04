@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,12 +24,15 @@ public class ResumeService {
     private final ModelMapper modelMapper;
 
 
+    @Transactional
     public ResponseResumeDto writeResume(ResumeDto dto, Long id) {
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
         Resume resume = Resume.from(dto);
         resume.setMember(member);
         resume = resumeRepository.save(resume);
+
+
         ResponseResumeDto responseResumeDto = modelMapper.map(resume, ResponseResumeDto.class);
         responseResumeDto.setMessage("이력서 저장을 성공했습니다");
         responseResumeDto.setResponseStatus("SUCCESS");

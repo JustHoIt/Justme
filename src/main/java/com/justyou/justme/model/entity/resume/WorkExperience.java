@@ -15,15 +15,13 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "WORKEXPERIENCE")
-@AuditOverride(forClass = BaseEntity.class)
-public class WorkExperience extends BaseEntity {
+public class WorkExperience{
     //외부 링크
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JsonBackReference
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "resume_id")
     private Resume resume;
     private String workExperienceCompanyName; //회사명
@@ -34,8 +32,9 @@ public class WorkExperience extends BaseEntity {
     private LocalDate workExperienceStartDt; //시작일
     private LocalDate workExperienceEndDt; //종료일
 
-    public static WorkExperience of(WorkExperienceDto dto){
+    public static WorkExperience of(WorkExperienceDto dto, Resume resume){
         return WorkExperience.builder()
+                .resume(resume)
                 .workExperienceCompanyName(dto.getWorkExperienceCompanyName())
                 .workExperienceDepartment(dto.getWorkExperienceDepartment())
                 .workExperiencePosition(dto.getWorkExperiencePosition())

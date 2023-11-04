@@ -14,20 +14,20 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "SKILL")
-@AuditOverride(forClass = BaseEntity.class)
-public class Skill extends BaseEntity {
+public class Skill{
     //기술
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @JsonBackReference
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "resume_id")
     private Resume resume;
     private String skillName; //스킬명
 
-    public static Skill of(SkillDto dto){
+    public static Skill of(SkillDto dto,Resume resume){
         return Skill.builder()
+                .resume(resume)
                 .skillName(dto.getSkillName())
                 .build();
     }

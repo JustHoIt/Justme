@@ -63,7 +63,8 @@ public class MemberController {
 
     @ApiOperation(value = "비밀번호 변경 - 새 비밀번호 입력")
     @PostMapping("/password/new")
-    public ResponseEntity<ResponseUserDto> changePassword(@RequestBody RequestNewPasswordDto form) {
+    public ResponseEntity<ResponseUserDto> changePassword(@RequestParam String uuid, @RequestBody RequestNewPasswordDto form) {
+        form.setUUID(uuid);
         return ResponseEntity.ok(this.memberService.changePassword(form));
     }
 
