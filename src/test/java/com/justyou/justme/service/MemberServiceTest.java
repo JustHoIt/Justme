@@ -1,7 +1,7 @@
 package com.justyou.justme.service;
 
 import com.justyou.justme.dto.RequestMemberSignUpDto;
-import com.justyou.justme.dto.ResponseDto;
+import com.justyou.justme.dto.ResponseUserDto;
 import com.justyou.justme.exception.CustomException;
 import com.justyou.justme.exception.ErrorCode;
 import com.justyou.justme.model.entity.Member;
@@ -60,7 +60,7 @@ class MemberServiceTest {
                 .phone(dto.getPhone())
                 .build();
         // Mock 데이터 설정 (회원 가입 성공 시나리오)
-        given(modelMapper.map(any(), any())).willReturn(ResponseDto.builder()
+        given(modelMapper.map(any(), any())).willReturn(ResponseUserDto.builder()
                 .email("ppp@nana.com")
                 .name("박호민")
                 .message("회원가입이 성공적으로 완료되었습니다.")
@@ -69,7 +69,7 @@ class MemberServiceTest {
 
         //when
         // 테스트 메소드 호출
-        ResponseDto responseDto = modelMapper.map(member, ResponseDto.class);
+        ResponseUserDto responseDto = modelMapper.map(member, ResponseUserDto.class);
 
         //then
         // 예상 결과 확인 및 저장된 데이터 일치하는지 확인

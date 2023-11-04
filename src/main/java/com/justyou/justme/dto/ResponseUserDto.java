@@ -8,7 +8,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResponseDto {
+public class ResponseUserDto {
     private String email;
     private String name;
     private String message;

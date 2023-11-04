@@ -1,7 +1,9 @@
 package com.justyou.justme.model.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.justyou.justme.dto.RequestMemberSignUpDto;
+import com.justyou.justme.model.entity.resume.Resume;
 import lombok.*;
 import org.hibernate.envers.AuditOverride;
 
@@ -11,6 +13,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Locale;
 
 import static com.justyou.justme.UserCode.MemberCode.MEMBER_STATUS_REQ;
@@ -41,6 +44,12 @@ public class Member extends BaseEntity {
     private String userStatus; //회원상태
     private String address; //주소
     private int zipCode; //우편번호
+
+
+    @JsonManagedReference
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "resume_id")
+    private List<Resume> resumes;
 
     //이메일 인증 관련 컬럼
     private boolean emailAuth;
