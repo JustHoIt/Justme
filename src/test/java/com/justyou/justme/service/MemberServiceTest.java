@@ -3,7 +3,7 @@ package com.justyou.justme.service;
 import com.justyou.justme.component.MailComponent;
 import com.justyou.justme.dto.MemberDto;
 import com.justyou.justme.dto.RequestMemberSignUpDto;
-import com.justyou.justme.dto.ResponseDto;
+import com.justyou.justme.dto.ResponseUserDto;
 import com.justyou.justme.dto.UserDto;
 import com.justyou.justme.exception.CustomException;
 import com.justyou.justme.exception.ErrorCode;

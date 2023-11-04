@@ -39,7 +39,7 @@ public class MemberService implements UserDetailsService {
     private final MailComponent mailComponent;
 
     @Transactional
-    public ResponseDto signUp(RequestMemberSignUpDto dto) {
+    public ResponseUserDto signUp(RequestMemberSignUpDto dto) {
         long startTime = System.currentTimeMillis();
         // 데이터베이스에서 Email && Phone 중복 조회 후 존재하면 예외처리
         if (this.memberRepository.existsByEmail(dto.getEmail())) {
@@ -60,8 +60,8 @@ public class MemberService implements UserDetailsService {
         boolean result = mailComponent.signUpSender(member);
 
         //회원가입 성공시 회원의 최소정보 + 메시지로 전달 하기 위해 ResponseDto 로 변환
-        ResponseDto responseDto = modelMapper.map(member, ResponseDto.class);
-        responseDto.setMessage("회원가입이 성공적으로 완료되었습니다.");
+        ResponseUserDto responseDto = modelMapper.map(member, ResponseUserDto.class);
+        responseDto.setMessage("회원가입을 성공했습니다.");
         responseDto.setResponseStatus("SUCCESS");
         long stopTime = System.currentTimeMillis();
 
@@ -81,7 +81,7 @@ public class MemberService implements UserDetailsService {
     }
 
     //이메일 인증
-    public ResponseDto emailAuth(String uuid) {
+    public ResponseUserDto emailAuth(String uuid) {
         Optional<Member> optionalMember = this.memberRepository.findByEmailAuthKey(uuid);
         if (optionalMember.isEmpty()) {
             throw new CustomException(ErrorCode.NOT_FOUND_USER);
@@ -96,8 +96,8 @@ public class MemberService implements UserDetailsService {
         member.setUserStatus(MEMBER_STATUS_ING.getStatus());
         memberRepository.save(member);
 
-        ResponseDto responseDto = modelMapper.map(member, ResponseDto.class);
-        responseDto.setMessage("이메일 인증이 완료되었습니다.");
+        ResponseUserDto responseDto = modelMapper.map(member, ResponseUserDto.class);
+        responseDto.setMessage("이메일 인증에 성공했습니다.");
         responseDto.setResponseStatus("SUCCESS");
 
         return responseDto;
@@ -150,7 +150,7 @@ public class MemberService implements UserDetailsService {
     }
 
     //비밀번호 변경
-    public ResponseDto changePassword(RequestNewPasswordDto form) {
+    public ResponseUserDto changePassword(RequestNewPasswordDto form) {
         Optional<Member> optionalMember = memberRepository.findByPasswordChangeKey(form.getUUID());
         //유저 정보 없으면 예외처리
         if (optionalMember.isEmpty()) {
@@ -171,9 +171,8 @@ public class MemberService implements UserDetailsService {
         member.setPasswordChangeLimitDt(null);
         memberRepository.save(member);
 
-        //최소정보 Dto 담아서 보내기
-        ResponseDto responseDto = modelMapper.map(member, ResponseDto.class);
-        responseDto.setMessage("비밀번호 변경이 완료되었습니다.");
+        ResponseUserDto responseDto = modelMapper.map(member, ResponseUserDto.class);
+        respons=ssage("비밀번호 변경을 성공했습니다.");
         responseDto.setResponseStatus("SUCCESS");
 
         return responseDto;

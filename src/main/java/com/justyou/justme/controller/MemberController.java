@@ -25,7 +25,7 @@ public class MemberController {
     /*@Valid*/
     @ApiOperation(value = "회원가입")
     @PostMapping("/signUp")
-    public ResponseEntity<ResponseDto> signUp(@Valid @RequestBody RequestMemberSignUpDto form) {
+    public ResponseEntity<ResponseUserDto> signUp(@Valid @RequestBody RequestMemberSignUpDto form) {
         return ResponseEntity.ok(this.memberService.signUp(form));
     }
 
@@ -43,7 +43,7 @@ public class MemberController {
 
     @ApiOperation(value = "이메일 인증")
     @GetMapping("email-auth")
-    public ResponseEntity<ResponseDto> emailAuth(@RequestParam String id) {
+    public ResponseEntity<ResponseUserDto> emailAuth(@RequestParam String id) {
         return ResponseEntity.ok(this.memberService.emailAuth(id));
     }
 
@@ -63,7 +63,7 @@ public class MemberController {
 
     @ApiOperation(value = "비밀번호 변경 - 새 비밀번호 입력")
     @PostMapping("/password/new")
-    public ResponseEntity<ResponseDto> changePassword(@RequestBody RequestNewPasswordDto form) {
+    public ResponseEntity<ResponseUserDto> changePassword(@RequestBody RequestNewPasswordDto form) {
         return ResponseEntity.ok(this.memberService.changePassword(form));
     }
 
