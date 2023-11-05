@@ -17,7 +17,9 @@ public enum ErrorCode {
     NOT_EMAIL_AUTHENTICATE_USER(HttpStatus.BAD_REQUEST, "이메일 인증이 완료되지 않은 유저입니다."),
     NOT_VALID_DATE(HttpStatus.BAD_REQUEST, "유효하지 않은 DATE(날짜) 입니다."),
     TIME_OUT(HttpStatus.BAD_REQUEST, "시간이 초과 되었습니다."),
-    WITHDRAW_USER(HttpStatus.BAD_REQUEST, "회원탈퇴한 유저입니다.");
+    WITHDRAW_USER(HttpStatus.BAD_REQUEST, "회원탈퇴한 유저입니다."),
+    NOT_HAVE_ACCESS_RIGHTS(HttpStatus.BAD_REQUEST, "접근권한이 없습니다."),
+    NOT_FOUND_RESUME(HttpStatus.BAD_REQUEST, "존재하지 않는 이력서 입니다.");
 
 
     private final HttpStatus httpStatus;
