@@ -1,5 +1,6 @@
 package com.justyou.justme.dto.resume;
 
+import com.justyou.justme.model.entity.resume.WorkExperience;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,4 +18,16 @@ public class WorkExperienceDto {
     private String workExperienceText; //내용
     private LocalDate workExperienceStartDt; //시작일
     private LocalDate workExperienceEndDt; //종료일
+
+    public static WorkExperienceDto of(WorkExperience workExperience) {
+        return WorkExperienceDto.builder()
+                .workExperienceCompanyName(workExperience.getWorkExperienceCompanyName())
+                .workExperienceDepartment(workExperience.getWorkExperienceDepartment())
+                .workExperiencePosition(workExperience.getWorkExperiencePosition())
+                .workExperienceTitle(workExperience.getWorkExperienceTitle())
+                .workExperienceText(workExperience.getWorkExperienceText())
+                .workExperienceStartDt(workExperience.getWorkExperienceStartDt())
+                .workExperienceEndDt(workExperience.getWorkExperienceEndDt())
+                .build();
+    }
 }

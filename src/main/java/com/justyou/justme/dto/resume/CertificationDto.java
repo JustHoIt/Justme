@@ -1,5 +1,6 @@
 package com.justyou.justme.dto.resume;
 
+import com.justyou.justme.model.entity.resume.Certification;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,4 +15,13 @@ public class CertificationDto {
     private String certificationIssuer;//발급기관
     private String certificationScore;//취득점수 및 등급
     private LocalDate certificationAcquisitionDt; // 취득일 LocalDate
+
+    public static CertificationDto of(Certification certification) {
+        return CertificationDto.builder()
+                .certificationAcquisitionDt(certification.getCertificationAcquisitionDt())
+                .certificationIssuer(certification.getCertificationIssuer())
+                .certificationName(certification.getCertificationName())
+                .certificationScore(certification.getCertificationScore())
+                .build();
+    }
 }

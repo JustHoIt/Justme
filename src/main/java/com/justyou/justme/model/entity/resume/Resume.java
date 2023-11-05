@@ -25,8 +25,6 @@ public class Resume extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "resume_id")
     private Long id;
-
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
@@ -38,7 +36,7 @@ public class Resume extends BaseEntity {
     private String intro; //간단 자기소개
 
 
-    @OneToMany(mappedBy = "resume", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "resume", cascade = CascadeType.ALL)
     private List<Education> educations = new ArrayList<>(); // 1.학력
 
     @OneToMany(mappedBy = "resume", cascade = CascadeType.ALL)
@@ -48,7 +46,7 @@ public class Resume extends BaseEntity {
     private List<Award> awards = new ArrayList<>(); // 3.수상
 
     @OneToMany(mappedBy = "resume", cascade = CascadeType.ALL)
-    private List<Certification> certificates = new ArrayList<>(); // 4.자격증
+    private List<Certification> certifications = new ArrayList<>(); // 4.자격증
 
     @OneToMany(mappedBy = "resume", cascade = CascadeType.ALL)
     private List<Language> languages = new ArrayList<>(); // 5.외국어 시험 능력 시험
@@ -76,34 +74,34 @@ public class Resume extends BaseEntity {
                 .resumeTitle(dto.getResumeTitle())
                 .intro(dto.getIntro())
                 .build();
-        resume.setEducations(dto.getEducationDtoList().stream()
+        resume.setEducations(dto.getEducations().stream()
                 .map(educationDto -> Education.of(educationDto, resume))
                 .collect(Collectors.toList()));
-        resume.setSkills(dto.getSkillDtoList().stream()
+        resume.setSkills(dto.getSkills().stream()
                 .map(skillDto -> Skill.of(skillDto, resume))
                 .collect(Collectors.toList()));
-        resume.setAwards(dto.getAwardDtoList().stream()
+        resume.setAwards(dto.getAwards().stream()
                 .map(awardDto -> Award.of(awardDto, resume))
                 .collect(Collectors.toList()));
-        resume.setCertificates(dto.getCertificationDtoList().stream()
+        resume.setCertifications(dto.getCertifications().stream()
                 .map(certificationDto -> Certification.of(certificationDto, resume))
                 .collect(Collectors.toList()));
-        resume.setLanguages(dto.getLanguageDtoList().stream()
+        resume.setLanguages(dto.getLanguages().stream()
                 .map(languageDto -> Language.of(languageDto, resume))
                 .collect(Collectors.toList()));
-        resume.setWorkExperiences(dto.getWorkExperienceDtoList().stream()
+        resume.setWorkExperiences(dto.getWorkExperiences().stream()
                 .map(workExperienceDto -> WorkExperience.of(workExperienceDto, resume))
                 .collect(Collectors.toList()));
-        resume.setPortfolios(dto.getPortfolioDtoList().stream()
+        resume.setPortfolios(dto.getPortfolios().stream()
                 .map(portfolioDto -> Portfolio.of(portfolioDto, resume))
                 .collect(Collectors.toList()));
-        resume.setTrainingCourses(dto.getTrainingCourseDtoList().stream()
+        resume.setTrainingCourses(dto.getTrainingCourses().stream()
                 .map(trainingCourseDto -> TrainingCourse.of(trainingCourseDto, resume))
                 .collect(Collectors.toList()));
-        resume.setEtc(dto.getEtcDtoList().stream()
+        resume.setEtc(dto.getEtc().stream()
                 .map(etcDto -> Etc.of(etcDto, resume))
                 .collect(Collectors.toList()));
-        resume.setLinks(dto.getLinkDtoList().stream()
+        resume.setLinks(dto.getLinks().stream()
                 .map(linkDto -> Link.of(linkDto, resume))
                 .collect(Collectors.toList()));
         return resume;

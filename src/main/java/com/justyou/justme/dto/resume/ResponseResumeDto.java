@@ -1,4 +1,4 @@
-package com.justyou.justme.dto;
+package com.justyou.justme.dto.resume;
 
 
 import lombok.*;
