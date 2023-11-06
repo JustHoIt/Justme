@@ -31,6 +31,13 @@ public class ResumeController {
         return ResponseEntity.ok(resumeService.writeResume(dto, tokenProvider.getUser(token).getId()));
     }
 
+    @ApiOperation(value = "이력서 수정")
+    @PutMapping("/{resumeId}")
+    public ResponseEntity<?> updateResume(@RequestHeader(name = "auth-token") String token,
+                                          @PathVariable Long resumeId , @RequestBody ResumeDto dto){
+        return ResponseEntity.ok(resumeService.updateResume(dto, resumeId, tokenProvider.getUser(token).getId()));
+    }
+
     @ApiOperation(value = "이력서 리스트")
     @GetMapping("/resumeList")
     public ResponseEntity<Page<ResponseResumeListDto>> listResume(@RequestHeader(name = "auth-token") String token
@@ -47,18 +54,10 @@ public class ResumeController {
     }
 
     @ApiOperation(value = "이력서 삭제")
-    @DeleteMapping("/delete{resumeId}")
+    @DeleteMapping("/{resumeId}")
     public ResponseEntity<ResponseResumeDto> deleteResume(@RequestHeader(name = "auth-token") String token,
                                                           @PathVariable Long resumeId) {
         return ResponseEntity.ok(resumeService.deleteResume(tokenProvider.getUser(token).getId(), resumeId));
     }
-
-//    @ApiOperation(value = "이력서 수정")
-//    @PatchMapping("/")
-//    public ResponseEntity<?> aaa3(@RequestHeader(name = "auth-token") String token,
-//                                  @RequestBody ResumeDto dto){
-//
-//    }
-
 
 }
