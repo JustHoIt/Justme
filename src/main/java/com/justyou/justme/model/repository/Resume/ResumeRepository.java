@@ -1,4 +1,4 @@
-package com.justyou.justme.model.repository;
+package com.justyou.justme.model.repository.Resume;
 
 import com.justyou.justme.model.entity.resume.Resume;
 import org.springframework.data.domain.Page;
