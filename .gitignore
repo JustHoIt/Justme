@@ -12,10 +12,10 @@ build/
 .settings
 .springBeans
 .sts4-cache
-.yml
 bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
+src/main/resources/application.yml
 
 ### IntelliJ IDEA ###
 .idea
