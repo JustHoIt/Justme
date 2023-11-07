@@ -2,7 +2,7 @@ package com.justyou.justme.dto.resume;
 
 import lombok.*;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Setter
 @Getter
@@ -11,7 +11,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class ResponseResumeListDto {
     private String title; //이력서 제목
-    private LocalDate createDt;
-    private LocalDate modifyDt;
-    private String Status;
+    private LocalDateTime createdAt; //이력서 만든시간
+    private LocalDateTime modifiedAt; //이력서 수정시간
 }
