@@ -7,7 +7,7 @@ import com.justyou.justme.exception.ErrorCode;
 import com.justyou.justme.model.entity.Member;
 import com.justyou.justme.model.entity.resume.*;
 import com.justyou.justme.model.repository.MemberRepository;
-import com.justyou.justme.model.repository.Resume.ResumeRepository;
+import com.justyou.justme.model.repository.Resume.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -27,6 +27,16 @@ import java.util.stream.Collectors;
 public class ResumeService {
     private final MemberRepository memberRepository;
     private final ResumeRepository resumeRepository;
+    private final AwardRepository awardRepository;
+    private final CertificationRepository certificationRepository;
+    private final EducationRepository educationRepository;
+    private final EtcRepository etcRepository;
+    private final LanguageRepository languageRepository;
+    private final LinkRepository linkRepository;
+    private final PortfolioRepository portfolioRepository;
+    private final SkillRepository skillRepository;
+    private final TrainingCourseRepository trainingCourseRepository;
+    private final WorkExperienceRepository workExperienceRepository;
     private final ModelMapper modelMapper;
 
 
@@ -37,7 +47,6 @@ public class ResumeService {
         Resume resume = Resume.from(dto);
         resume.setMember(member);
         resume = resumeRepository.save(resume);
-
 
         ResponseResumeDto responseResumeDto = modelMapper.map(resume, ResponseResumeDto.class);
         responseResumeDto.setMessage("이력서 저장을 성공했습니다");
@@ -67,17 +76,28 @@ public class ResumeService {
         resume.setMemberEmail(dto.getMemberEmail());
         resume.setMemberPhone(dto.getMemberPhone());
         resume.setIntro(dto.getIntro());
+        educationRepository.deleteByResumeId(resumeId);
         resume.setEducations(mapEducations(dto.getEducations(), resume));
+        skillRepository.deleteByResumeId(resumeId);
         resume.setSkills(mapSkills(dto.getSkills(), resume));
+        awardRepository.deleteByResumeId(resumeId);
         resume.setAwards(mapAwards(dto.getAwards(), resume));
+        certificationRepository.deleteByResumeId(resumeId);
         resume.setCertifications(mapCertifications(dto.getCertifications(), resume));
+        languageRepository.deleteByResumeId(resumeId);
         resume.setLanguages(mapLanguages(dto.getLanguages(), resume));
+        workExperienceRepository.deleteByResumeId(resumeId);
         resume.setWorkExperiences(mapWorkExperiences(dto.getWorkExperiences(), resume));
+        portfolioRepository.deleteByResumeId(resumeId);
         resume.setPortfolios(mapPortfolios(dto.getPortfolios(), resume));
+        trainingCourseRepository.deleteByResumeId(resumeId);
         resume.setTrainingCourses(mapTrainingCourses(dto.getTrainingCourses(), resume));
+        etcRepository.deleteByResumeId(resumeId);
         resume.setEtc(mapEtc(dto.getEtc(), resume));
-        resume.setEtc(mapEtc(dto.getEtc(), resume));
+        linkRepository.deleteByResumeId(resumeId);
         resume.setLinks(mapLinks(dto.getLinks(), resume));
+
+        resume = resumeRepository.save(resume);
 
         ResponseResumeDto responseResumeDto = modelMapper.map(resume, ResponseResumeDto.class);
         responseResumeDto.setMessage("이력서 수정을 완료했습니다.");
