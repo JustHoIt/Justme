@@ -1,7 +1,8 @@
 package com.justyou.justme.component;
 
 import com.justyou.justme.dto.SendMailDto;
-import com.justyou.justme.model.entity.Member;
+import com.justyou.justme.model.entity.MySQL.Member;
+import com.justyou.justme.model.entity.Redis.RedisUser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.MailException;
@@ -19,28 +20,22 @@ public class MailComponent {
 
     private final JavaMailSender javaMailSender;
 
-    public boolean signUpSender(Member member) {
-        long startTime = System.currentTimeMillis();
-
+    public void signUpSender(RedisUser redisUser, String key) {
         SendMailDto sendMailDto = SendMailDto.builder()
-                .to(member.getEmail())
+                .to(redisUser.getEmail())
                 .from("JUST ME")
                 .subject(" JUST ME - 이메일 인증")
                 .text("<H1>JUST ME 회원 가입을 축하드립니다.</H1>" +
                         "</br>" +
-                        "아래 링크를 클릭하셔서 이메일 인증을 완료 해주세요." +
+                        "아래 링크를 클릭하여 이메일 인증을 완료 해주세요." +
                         "</br>" +
                         "<div><a target='_blank' href='https://localhost:8080/users/email-auth?id=" +
-                        member.getEmailAuthKey() + "'> 이메일 인증하기 </a></div>" +
+                        key + "'> 이메일 인증하기 </a></div>" +
                         "</br>")
                 .build();
-        log.info("이메일 인증 메일 발송완료 TO: " + member.getEmail());
+        log.info("이메일 인증 메일 발송완료 TO: " + redisUser.getEmail());
 
-        boolean result = sendEmail(sendMailDto);
-        long stopTime = System.currentTimeMillis();
-        log.info("이메일 인증메일 발송 결과 : " + result + " | 메일 발송 걸린시간 : " + (stopTime - startTime));
-
-        return result;
+        sendEmail(sendMailDto);
     }
 
     public boolean changePasswordAuthSender(Member member) {
@@ -50,7 +45,7 @@ public class MailComponent {
                 .to(member.getEmail())
                 .from("JUST ME")
                 .subject(" JUST ME - 비밀번호 재설정")
-                .text("아래 링크를 클릭하셔서 비밀번호를 변경 해주세요."
+                .text("아래 링크를 클릭하여 비밀번호를 변경 해주세요."
                         + "</br>" +
                         "<div><a target='_blank' href='https://localhost:8080/password/new?uuid="
                         + member.getPasswordChangeKey() + "'> 비밀번호 재설정 링크 </a></div>"

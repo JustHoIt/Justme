@@ -1,9 +1,9 @@
-package com.justyou.justme.model.entity.resume;
+package com.justyou.justme.model.entity.MySQL.resume;
 
 
 import com.justyou.justme.dto.resume.ResumeDto;
-import com.justyou.justme.model.entity.BaseEntity;
-import com.justyou.justme.model.entity.Member;
+import com.justyou.justme.model.entity.MySQL.BaseEntity;
+import com.justyou.justme.model.entity.MySQL.Member;
 import lombok.*;
 import org.hibernate.envers.AuditOverride;
 

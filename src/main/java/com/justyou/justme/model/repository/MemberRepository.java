@@ -1,7 +1,7 @@
 package com.justyou.justme.model.repository;
 
 
-import com.justyou.justme.model.entity.Member;
+import com.justyou.justme.model.entity.MySQL.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -18,6 +18,4 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findByEmailAndName(String email, String name);
 
     Optional<Member> findByPasswordChangeKey(String uuid);
-
-    Optional<Member> findByEmailAuthKey(String uuid);
 }

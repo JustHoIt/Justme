@@ -1,9 +1,8 @@
-package com.justyou.justme.model.entity;
+package com.justyou.justme.model.entity.MySQL;
 
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.justyou.justme.dto.RequestMemberSignUpDto;
-import com.justyou.justme.model.entity.resume.Resume;
+import com.justyou.justme.model.entity.MySQL.resume.Resume;
 import lombok.*;
 import org.hibernate.envers.AuditOverride;
 
@@ -52,7 +51,6 @@ public class Member extends BaseEntity {
     //이메일 인증 관련 컬럼
     private boolean emailAuth;
     private LocalDateTime emailAuthDate;
-    private String emailAuthKey;
 
     //비밀번호 변경 관련 컬럼
     private String passwordChangeKey;

@@ -1,6 +1,6 @@
 package com.justyou.justme.dto.resume;
 
-import com.justyou.justme.model.entity.resume.Language;
+import com.justyou.justme.model.entity.MySQL.resume.Language;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

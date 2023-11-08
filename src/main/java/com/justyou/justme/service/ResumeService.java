@@ -4,8 +4,8 @@ package com.justyou.justme.service;
 import com.justyou.justme.dto.resume.*;
 import com.justyou.justme.exception.CustomException;
 import com.justyou.justme.exception.ErrorCode;
-import com.justyou.justme.model.entity.Member;
-import com.justyou.justme.model.entity.resume.*;
+import com.justyou.justme.model.entity.MySQL.Member;
+import com.justyou.justme.model.entity.MySQL.resume.*;
 import com.justyou.justme.model.repository.MemberRepository;
 import com.justyou.justme.model.repository.Resume.*;
 import lombok.RequiredArgsConstructor;
@@ -59,15 +59,15 @@ public class ResumeService {
     public ResponseResumeDto updateResume(ResumeDto dto, Long resumeId, Long memberId) {
         Optional<Member> optionalMember = memberRepository.findById(memberId);
         if (optionalMember.isEmpty()) {
-            //유저 정보가 있지않다면
+            //유저 정보가 있지 않다면
             throw new CustomException(ErrorCode.NOT_FOUND_USER);
         }
         Optional<Resume> optionalResume = resumeRepository.findById(resumeId);
         if (optionalResume.isEmpty()) {
-            //resumeId와 일치하는 이력서 데이터가 없을시
+            //resumeId와 일치 하는 이력서 데이터가 없을시
             throw new CustomException(ErrorCode.NOT_FOUND_RESUME);
         } else if (!Objects.equals(optionalResume.get().getMember().getId(), optionalMember.get().getId())) {
-            //이력서의 존재하는 memberId와 로그인한 resumeId가 일치하지 않는다면
+            //이력서의 존재 하는 memberId와 로그인 한 resumeId가 일치 하지 않는 다면
             throw new CustomException(ErrorCode.NOT_HAVE_ACCESS_RIGHTS);
         }
         Resume resume = optionalResume.get();
@@ -114,7 +114,7 @@ public class ResumeService {
         //sort = new, modify,
         Page<Resume> resumes = resumeRepository
                 .findByMemberIdOrderByModifiedAtDesc(optionalMember.get().getId(), pageable);
-        //수정일 내림차순으로 가져오기
+        //수정일 내림차순 으로 가져오기
         Page<ResponseResumeListDto> responseResumeList = resumes
                 .map(resume -> modelMapper.map(resume, ResponseResumeListDto.class));
 
@@ -125,7 +125,7 @@ public class ResumeService {
     public ResumeDto viewResume(Long memberId, Long resumeId) {
         Optional<Member> optionalMember = memberRepository.findById(memberId);
         if (optionalMember.isEmpty()) {
-            //유저 정보가 있지않다면
+            //유저 정보가 있지 않다면
             throw new CustomException(ErrorCode.NOT_FOUND_USER);
         }
         Optional<Resume> optionalResume = resumeRepository.findById(resumeId);

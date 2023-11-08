@@ -1,10 +1,7 @@
-package com.justyou.justme.model.entity.resume;
+package com.justyou.justme.model.entity.MySQL.resume;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.justyou.justme.dto.resume.EducationDto;
-import com.justyou.justme.model.entity.BaseEntity;
 import lombok.*;
-import org.hibernate.envers.AuditOverride;
 
 import javax.persistence.*;
 import java.time.LocalDate;

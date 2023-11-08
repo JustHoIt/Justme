@@ -1,6 +1,6 @@
 package com.justyou.justme.dto;
 
-import com.justyou.justme.model.entity.Member;
+import com.justyou.justme.model.entity.MySQL.Member;
 import lombok.*;
 
 

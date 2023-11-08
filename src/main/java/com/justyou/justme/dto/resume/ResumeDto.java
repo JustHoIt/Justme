@@ -1,8 +1,7 @@
 package com.justyou.justme.dto.resume;
 
 
-import com.justyou.justme.model.entity.Member;
-import com.justyou.justme.model.entity.resume.Resume;
+import com.justyou.justme.model.entity.MySQL.resume.Resume;
 import lombok.*;
 
 import java.util.List;
