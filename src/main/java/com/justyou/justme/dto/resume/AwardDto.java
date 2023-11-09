@@ -1,7 +1,6 @@
 package com.justyou.justme.dto.resume;
 
-import com.justyou.justme.model.entity.resume.Award;
-import com.justyou.justme.model.entity.resume.Resume;
+import com.justyou.justme.model.entity.MySQL.resume.Award;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

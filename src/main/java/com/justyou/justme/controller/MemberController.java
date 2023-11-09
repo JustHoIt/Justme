@@ -2,7 +2,7 @@ package com.justyou.justme.controller;
 
 
 import com.justyou.justme.dto.*;
-import com.justyou.justme.model.entity.Member;
+import com.justyou.justme.model.entity.MySQL.Member;
 import com.justyou.justme.security.TokenProvider;
 import com.justyou.justme.service.MemberService;
 import io.swagger.annotations.ApiOperation;
@@ -25,8 +25,14 @@ public class MemberController {
     /*@Valid*/
     @ApiOperation(value = "회원가입")
     @PostMapping("/signUp")
-    public ResponseEntity<ResponseUserDto> signUp(@Valid @RequestBody RequestMemberSignUpDto form) {
+    public ResponseEntity<ResponseUserDto> signUpRedis(@Valid @RequestBody RequestMemberSignUpDto form) {
         return ResponseEntity.ok(this.memberService.signUp(form));
+    }
+
+    @ApiOperation(value = "이메일 인증")
+    @GetMapping("email-auth")
+    public ResponseEntity<ResponseUserDto> emailAuthRedis(@RequestParam String id) {
+        return ResponseEntity.ok(this.memberService.emailAuth(id));
     }
 
     @ApiOperation(value = "휴대폰 중복 체크")
@@ -39,12 +45,6 @@ public class MemberController {
     @GetMapping("/check/email")
     public ResponseEntity<Boolean> checkEmail(@RequestParam String email) {
         return ResponseEntity.ok(this.memberService.checkEmail(email));
-    }
-
-    @ApiOperation(value = "이메일 인증")
-    @GetMapping("email-auth")
-    public ResponseEntity<ResponseUserDto> emailAuth(@RequestParam String id) {
-        return ResponseEntity.ok(this.memberService.emailAuth(id));
     }
 
     @ApiOperation(value = "로그인")

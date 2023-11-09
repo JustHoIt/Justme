@@ -7,7 +7,7 @@ import com.justyou.justme.dto.ResponseUserDto;
 import com.justyou.justme.dto.UserDto;
 import com.justyou.justme.exception.CustomException;
 import com.justyou.justme.exception.ErrorCode;
-import com.justyou.justme.model.entity.Member;
+import com.justyou.justme.model.entity.MySQL.Member;
 import com.justyou.justme.model.repository.MemberRepository;
 import com.justyou.justme.model.repository.WithdrawalMemberRepository;
 import org.assertj.core.api.Assertions;

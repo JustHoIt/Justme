@@ -1,6 +1,6 @@
 package com.justyou.justme.dto.resume;
 
-import com.justyou.justme.model.entity.resume.WorkExperience;
+import com.justyou.justme.model.entity.MySQL.resume.WorkExperience;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

@@ -29,7 +29,6 @@ public class RequestMemberSignUpDto {
     @NotBlank(message = "휴대폰 번호는 필수 입력 값 입니다.")
     private String phone; //휴대폰번호
     @NotNull(message = "생년월일은 필수 입력 값 입니다.")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Past(message = "생년월일은 오늘 날짜가 불가능합니다.")
     private LocalDate birth;
 

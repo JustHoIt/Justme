@@ -1,4 +1,4 @@
-package com.justyou.justme.model.entity;
+package com.justyou.justme.model.entity.MySQL;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;

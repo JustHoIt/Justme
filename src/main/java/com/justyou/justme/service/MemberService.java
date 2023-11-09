@@ -2,16 +2,19 @@ package com.justyou.justme.service;
 
 
 import com.justyou.justme.component.MailComponent;
+import com.justyou.justme.component.RedisComponent;
 import com.justyou.justme.dto.*;
 import com.justyou.justme.exception.CustomException;
 import com.justyou.justme.exception.ErrorCode;
-import com.justyou.justme.model.entity.Member;
-import com.justyou.justme.model.entity.WithdrawalMember;
+import com.justyou.justme.model.entity.MySQL.Member;
+import com.justyou.justme.model.entity.MySQL.WithdrawalMember;
+import com.justyou.justme.model.entity.Redis.RedisUser;
 import com.justyou.justme.model.repository.MemberRepository;
 import com.justyou.justme.model.repository.WithdrawalMemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -20,6 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
@@ -35,39 +39,38 @@ public class MemberService implements UserDetailsService {
     private final WithdrawalMemberRepository withdrawalMemberRepository;
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
+    private final RedisComponent redisComponent;
+
+    private final RedisTemplate<String, Object> redisTemplate;
 
     private final MailComponent mailComponent;
 
     @Transactional
-    public ResponseUserDto signUp(RequestMemberSignUpDto dto) {
-        long startTime = System.currentTimeMillis();
-        // 데이터베이스에서 Email && Phone 중복 조회 후 존재하면 예외처리
-        if (this.memberRepository.existsByEmail(dto.getEmail())) {
+    public ResponseUserDto signUp(RequestMemberSignUpDto form) {
+        if (this.memberRepository.existsByEmail(form.getEmail())) {
             throw new CustomException(ErrorCode.ALREADY_REGISTERED_EMAIL);
         }
-        if (this.memberRepository.existsByPhone(dto.getPhone())) {
+        if (this.memberRepository.existsByPhone(form.getPhone())) {
             throw new CustomException(ErrorCode.ALREADY_REGISTERED_PHONE);
         }
+
         //데이터베이스에 비밀번호 암호화해서 저장
         String uuid = UUID.randomUUID().toString();
-        String encPassword = BCrypt.hashpw(dto.getPassword(), BCrypt.gensalt());
-        dto.setPassword(encPassword);
+        String encPassword = BCrypt.hashpw(form.getPassword(), BCrypt.gensalt());
+        form.setPassword(encPassword);
+        String key = uuid;
+        //이메일 인증 시간 1시간
+        Duration expiration = Duration.ofHours(1);
+        RedisUser redisUser = RedisUser.from(form);
+        mailComponent.signUpSender(redisUser, key);
+        redisComponent.setExpiration(key, redisUser, expiration);
 
-        Member member = Member.from(dto);
-        member.setEmailAuthKey(uuid);
-        member = memberRepository.save(member);
-
-        boolean result = mailComponent.signUpSender(member);
-
-        //회원가입 성공시 회원의 최소정보 + 메시지로 전달 하기 위해 ResponseDto 로 변환
-        ResponseUserDto responseDto = modelMapper.map(member, ResponseUserDto.class);
+        ResponseUserDto responseDto = modelMapper.map(redisUser, ResponseUserDto.class);
         responseDto.setMessage("회원가입을 성공했습니다.");
         responseDto.setResponseStatus("SUCCESS");
-        long stopTime = System.currentTimeMillis();
-
-        log.info("Service 동작 걸린시간 : " + (stopTime - startTime) + " | 이메일 발송 결과 : " + result);
 
         return responseDto;
+
     }
 
     //휴대폰 번호 중복 체크
@@ -80,21 +83,16 @@ public class MemberService implements UserDetailsService {
         return this.memberRepository.existsByEmail(email);
     }
 
-    //이메일 인증
-    public ResponseUserDto emailAuth(String uuid) {
-        Optional<Member> optionalMember = this.memberRepository.findByEmailAuthKey(uuid);
-        if (optionalMember.isEmpty()) {
-            throw new CustomException(ErrorCode.NOT_FOUND_USER);
-        }
-        Member member = optionalMember.get();
-        if (member.isEmailAuth()) {
-            throw new CustomException(ErrorCode.ALREADY_AUTH_USER);
-        }
 
+    public ResponseUserDto emailAuth(String id) {
+        //예외처리 구현하기
+        RedisUser redisUser = (RedisUser) redisComponent.get(id);
+        Member member = modelMapper.map(redisUser, Member.class);
         member.setEmailAuth(true);
-        member.setEmailAuthDate(LocalDateTime.now());
         member.setUserStatus(MEMBER_STATUS_ING.getStatus());
+        member.setEmailAuthDate(LocalDateTime.now());
         memberRepository.save(member);
+        redisComponent.delete(id);
 
         ResponseUserDto responseUserDto = modelMapper.map(member, ResponseUserDto.class);
         responseUserDto.setMessage("이메일 인증에 성공했습니다.");

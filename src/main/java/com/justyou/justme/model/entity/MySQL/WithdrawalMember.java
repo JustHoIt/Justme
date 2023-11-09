@@ -1,4 +1,4 @@
-package com.justyou.justme.model.entity;
+package com.justyou.justme.model.entity.MySQL;
 
 
 import com.justyou.justme.dto.WithdrawalMemberDto;

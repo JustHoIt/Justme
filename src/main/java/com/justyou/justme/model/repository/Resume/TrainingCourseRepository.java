@@ -1,6 +1,6 @@
 package com.justyou.justme.model.repository.Resume;
 
-import com.justyou.justme.model.entity.resume.TrainingCourse;
+import com.justyou.justme.model.entity.MySQL.resume.TrainingCourse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

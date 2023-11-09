@@ -1,7 +1,6 @@
 package com.justyou.justme.dto.resume;
 
-import com.justyou.justme.model.entity.resume.Skill;
-import jdk.jfr.Name;
+import com.justyou.justme.model.entity.MySQL.resume.Skill;
 import lombok.*;
 
 @Getter
