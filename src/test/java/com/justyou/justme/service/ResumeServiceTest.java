@@ -257,6 +257,7 @@ class ResumeServiceTest {
         assertNotNull(resumeDto);
         assertEquals(resumeDto.getIntro(), "안녕하세요 박호민입니다.");
 
+
         // Repository의 findById 메서드 를 한 번씩 호출 했는지 검증
         verify(memberRepository, times(1)).findById(memberId);
         verify(resumeRepository, times(1)).findById(resumeId);
@@ -276,6 +277,7 @@ class ResumeServiceTest {
         // 예외 결과 검증
         assertThrows(CustomException.class, () -> resumeService.viewResume(memberId, resumeId));
 
+
         // Repository의 findById 메서드 를 한 번씩 호출 했는지 검증
         verify(memberRepository, times(1)).findById(memberId);
         verify(resumeRepository, never()).findById(any());
@@ -293,6 +295,7 @@ class ResumeServiceTest {
         // Repository의 findById 메서드 설정
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
         when(resumeRepository.findById(resumeId)).thenReturn(Optional.empty());
+
 
         // 예외 결과 검증
         assertThrows(CustomException.class, () -> resumeService.viewResume(memberId, resumeId));
