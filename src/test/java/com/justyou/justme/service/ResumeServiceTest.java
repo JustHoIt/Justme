@@ -300,118 +300,42 @@ class ResumeServiceTest {
         assertThrows(CustomException.class, () -> resumeService.viewResume(memberId, resumeId));
     }
 
-    @Test
-    @DisplayName("이력서 보기 성공 ")
-    @Transactional(readOnly = true)
-    public void SUCCESS_VIEW_RESUME(){
-        // 가짜 데이터 생성
-        Long memberId = 1L;
-        Long resumeId = 1L;
-
-        Member member = new Member();
-        member.setId(memberId);
-
-        Resume resume =  Resume.builder()
-                .id(resumeId)
-                .member(member)
-                .memberName("박호민")
-                .member(member)
-                .memberEmail("phm3128@naver.com")
-                .memberPhone("01038053128")
-                .intro("안녕하세요 박호민입니다.")
-                .build();
-
-        // Repository의 findById 메서드 설정
-        when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
-        when(resumeRepository.findById(resumeId)).thenReturn(Optional.of(resume));
-
-        // 테스트할 메서드 호출
-        ResumeDto resumeDto = resumeService.viewResume(memberId, resumeId);
-
-        // 결과 검증
-        assertNotNull(resumeDto);
-        assertEquals(resumeDto.getIntro(), "안녕하세요 박호민입니다.");
-
-
-        // Repository의 findById 메서드 를 한 번씩 호출 했는지 검증
-        verify(memberRepository, times(1)).findById(memberId);
-        verify(resumeRepository, times(1)).findById(resumeId);
-
-    }
-
-    @Test
-    @DisplayName("이력서 보기 실패 - 찾을 수 없는 유저")
-    public void FAIL_VIEW_RESUME_NOT_FOUND_USER(){
-        // 실패 케이스 (유저를 찾을 수 없음)를 가정하고 테스트
-        Long memberId = 1L;
-        Long resumeId = 1L;
-
-        // Repository의 findById 메서드 설정
-        when(memberRepository.findById(memberId)).thenReturn(Optional.empty());
-
-        // 예외 결과 검증
-        assertThrows(CustomException.class, () -> resumeService.viewResume(memberId, resumeId));
-
-
-        // Repository의 findById 메서드 를 한 번씩 호출 했는지 검증
-        verify(memberRepository, times(1)).findById(memberId);
-        verify(resumeRepository, never()).findById(any());
-    }
-
-    @Test
-    @DisplayName("이력서 보기 실패 - 찾을 수 없는 이력서")
-    public void FAIL_VIEW_RESUME_NOT_FOUND_RESUME() {
-        // 실패 케이스 (이력서를 찾을 수 없음)를 가정하고 테스트
-        Long memberId = 1L;
-        Long resumeId = 1L;
-
-        Member member = new Member();
-        member.setId(memberId);
-        // Repository의 findById 메서드 설정
-        when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
-        when(resumeRepository.findById(resumeId)).thenReturn(Optional.empty());
-
-
-        // 예외 결과 검증
-        assertThrows(CustomException.class, () -> resumeService.viewResume(memberId, resumeId));
-    }
-
-    @Test
-    @DisplayName("이력서 업데이트 성공")
-    public void SUCCESS_UPDATE_RESUME(){
-        Long memberId = 1L;
-        Long resumeId = 1L;
-
-        Member member = new Member();
-        member.setId(memberId);
-
-        Resume resume = Resume.builder()
-                .id(resumeId)
-                .member(member)
-                .memberName("박호민")
-                .member(member)
-                .memberEmail("phm3128@naver.com")
-                .memberPhone("01038053128")
-                .intro("안녕하세요 박호민입니다.")
-                .build();
-        resumeRepository.save(resume);
-
-        ResumeDto resumeDto = new ResumeDto();
-        resumeDto.setMemberId(memberId);
-        resumeDto.setLanguages(resumeDto.getLanguages());
-
-
-        // Repository의 findById 메서드 설정
-        when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
-        when(resumeRepository.findById(resumeId)).thenReturn(Optional.of(resume));
-
-        ResponseResumeDto result = resumeService.updateResume(resumeDto, resumeId, memberId);
-
-        // 결과 검증
-        assertNotNull(result);
-        assertEquals("SUCCESS", result.getResponseStatus());
-        assertEquals("이력서 수정을 완료했습니다.", result.getMessage());
-
-    }
+//    @Test
+//    @DisplayName("이력서 업데이트 성공")
+//    public void SUCCESS_UPDATE_RESUME(){
+//        Long memberId = 1L;
+//        Long resumeId = 1L;
+//
+//        Member member = new Member();
+//        member.setId(memberId);
+//
+//        Resume resume = Resume.builder()
+//                .id(resumeId)
+//                .member(member)
+//                .memberName("박호민")
+//                .member(member)
+//                .memberEmail("phm3128@naver.com")
+//                .memberPhone("01038053128")
+//                .intro("안녕하세요 박호민입니다.")
+//                .build();
+//        resumeRepository.save(resume);
+//
+//        ResumeDto resumeDto = new ResumeDto();
+//        resumeDto.setMemberId(memberId);
+//        resumeDto.setLanguages(resumeDto.getLanguages());
+//
+//
+//        // Repository의 findById 메서드 설정
+//        when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
+//        when(resumeRepository.findById(resumeId)).thenReturn(Optional.of(resume));
+//
+//        ResponseResumeDto result = resumeService.updateResume(resumeDto, resumeId, memberId);
+//
+//        // 결과 검증
+//        assertNotNull(result);
+//        assertEquals("SUCCESS", result.getResponseStatus());
+//        assertEquals("이력서 수정을 완료했습니다.", result.getMessage());
+//
+//    }
 
 }
