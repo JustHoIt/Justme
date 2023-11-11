@@ -301,4 +301,42 @@ class ResumeServiceTest {
         assertThrows(CustomException.class, () -> resumeService.viewResume(memberId, resumeId));
     }
 
+    @Test
+    @DisplayName("이력서 업데이트 성공")
+    public void SUCCESS_UPDATE_RESUME(){
+        Long memberId = 1L;
+        Long resumeId = 1L;
+
+        Member member = new Member();
+        member.setId(memberId);
+
+        Resume resume = Resume.builder()
+                .id(resumeId)
+                .member(member)
+                .memberName("박호민")
+                .member(member)
+                .memberEmail("phm3128@naver.com")
+                .memberPhone("01038053128")
+                .intro("안녕하세요 박호민입니다.")
+                .build();
+        resumeRepository.save(resume);
+
+        ResumeDto resumeDto = new ResumeDto();
+        resumeDto.setMemberId(memberId);
+        resumeDto.setLanguages(resumeDto.getLanguages());
+
+
+        // Repository의 findById 메서드 설정
+        when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
+        when(resumeRepository.findById(resumeId)).thenReturn(Optional.of(resume));
+
+        ResponseResumeDto result = resumeService.updateResume(resumeDto, resumeId, memberId);
+
+        // 결과 검증
+        assertNotNull(result);
+        assertEquals("SUCCESS", result.getResponseStatus());
+        assertEquals("이력서 수정을 완료했습니다.", result.getMessage());
+
+    }
+
 }
