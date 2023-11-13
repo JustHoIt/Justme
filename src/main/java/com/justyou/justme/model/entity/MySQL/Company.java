@@ -1,14 +1,14 @@
 package com.justyou.justme.model.entity.MySQL;
 
 
+import com.justyou.justme.model.entity.Redis.RedisCompany;
 import lombok.*;
 import org.hibernate.envers.AuditOverride;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import java.time.LocalDateTime;
 
-import static com.justyou.justme.UserCode.CompanyCode.COMPANY_STATUS_REQ;
+import static com.justyou.justme.UserCode.CompanyCode.COMPANY_STATUS_ING;
 
 @Getter
 @Setter
@@ -31,13 +31,17 @@ public class Company extends BaseEntity {
     private boolean companyHRMAuth; //인적 자원 관리자 인증 여부;
     private LocalDateTime companyHRMAuthDate;
 
-//    public static Company from(){
-//        return Company.builder()
-//                .companyName()
-//                .email()
-//                .password()
-//                .companyHRMAuth(false)
-//                .companyStatus(COMPANY_STATUS_REQ.getStatus())
-//                .build();
+    public static Company from(RedisCompany redisCompany) {
+        return Company.builder()
+                .companyName(redisCompany.getCompanyName())
+                .email(redisCompany.getEmail())
+                .password(redisCompany.getPassword())
+                .officeTel(redisCompany.getOfficeTel())
+                .phone(redisCompany.getPhone())
+                .companyStatus(COMPANY_STATUS_ING.getStatus())
+                .companyHRMAuth(true)
+                .companyHRMAuthDate(LocalDateTime.now())
+                .build();
+    }
 }
 

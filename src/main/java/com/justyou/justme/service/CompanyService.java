@@ -7,6 +7,7 @@ import com.justyou.justme.dto.RequestCompanySignUpDto;
 import com.justyou.justme.dto.ResponseCompanyDto;
 import com.justyou.justme.exception.CustomException;
 import com.justyou.justme.exception.ErrorCode;
+import com.justyou.justme.model.entity.MySQL.Company;
 import com.justyou.justme.model.entity.Redis.RedisCompany;
 import com.justyou.justme.model.repository.CompanyRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.UUID;
+
+import static com.justyou.justme.UserCode.CompanyCode.COMPANY_STATUS_ING;
 
 @Service
 @RequiredArgsConstructor
@@ -51,11 +55,27 @@ public class CompanyService {
         mailComponent.companySignUpSender(redisCompany, uuid);
         redisComponent.setExpiration(uuid, redisCompany, expiration);
 
-        ResponseCompanyDto responseCompanyDto = modelMapper.map(redisCompany, ResponseCompanyDto.class);
+        ResponseCompanyDto responseCompanyDto =
+                modelMapper.map(redisCompany, ResponseCompanyDto.class);
         responseCompanyDto.setResponseStatus("SUCCESS");
         responseCompanyDto.setMessage("회사 HR 회원가입을 완료했습니다.");
 
         return responseCompanyDto;
     }
 
+    public ResponseCompanyDto emailAuth(String id) {
+        RedisCompany redisCompany = (RedisCompany) redisComponent.get(id);
+
+        Company company = Company.from(redisCompany);
+        redisComponent.delete(id);
+        companyRepository.save(company);
+
+        ResponseCompanyDto responseCompanyDto =
+                modelMapper.map(company, ResponseCompanyDto.class);
+
+        responseCompanyDto.setResponseStatus("SUCCESS");
+        responseCompanyDto.setMessage("회사 HR 이메일 인증에 성공했습니다.");
+
+        return responseCompanyDto;
+    }
 }

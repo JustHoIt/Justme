@@ -30,7 +30,7 @@ public class UserController {
     }
 
     @ApiOperation(value = "이메일 인증")
-    @GetMapping("email-auth")
+    @GetMapping("emailAuth")
     public ResponseEntity<ResponseUserDto> emailAuth(@RequestParam String id) {
         return ResponseEntity.ok(this.memberService.emailAuth(id));
     }
