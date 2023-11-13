@@ -17,21 +17,21 @@ import javax.validation.Valid;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
-public class MemberController {
+public class UserController {
 
     private final MemberService memberService;
     private final TokenProvider tokenProvider;
 
     /*@Valid*/
-    @ApiOperation(value = "회원가입")
+    @ApiOperation(value = "유저 - 회원가입")
     @PostMapping("/signUp")
-    public ResponseEntity<ResponseUserDto> signUpRedis(@Valid @RequestBody RequestMemberSignUpDto form) {
+    public ResponseEntity<ResponseUserDto> signUp(@Valid @RequestBody RequestMemberSignUpDto form) {
         return ResponseEntity.ok(this.memberService.signUp(form));
     }
 
     @ApiOperation(value = "이메일 인증")
     @GetMapping("email-auth")
-    public ResponseEntity<ResponseUserDto> emailAuthRedis(@RequestParam String id) {
+    public ResponseEntity<ResponseUserDto> emailAuth(@RequestParam String id) {
         return ResponseEntity.ok(this.memberService.emailAuth(id));
     }
 
