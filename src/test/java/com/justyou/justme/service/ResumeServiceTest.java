@@ -1,13 +1,12 @@
 package com.justyou.justme.service;
 
-import com.justyou.justme.dto.resume.*;
-import com.justyou.justme.exception.CustomException;
-import com.justyou.justme.exception.ErrorCode;
-import com.justyou.justme.model.entity.MySQL.Member;
-import com.justyou.justme.model.entity.MySQL.resume.Resume;
-import com.justyou.justme.model.repository.MemberRepository;
-import com.justyou.justme.model.repository.Resume.*;
-import org.assertj.core.api.Assertions;
+import com.justyou.justme.domains.resume.dto.*;
+import com.justyou.justme.domains.resume.model.repository.*;
+import com.justyou.justme.domains.resume.service.ResumeService;
+import com.justyou.justme.base.exception.CustomException;
+import com.justyou.justme.domains.member.model.entity.Member;
+import com.justyou.justme.domains.resume.model.entity.Resume;
+import com.justyou.justme.domains.member.model.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.justyou.justme.UserCode.MemberCode.MEMBER_STATUS_ING;
+import static com.justyou.justme.base.utils.MemberCode.MEMBER_STATUS_ING;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;

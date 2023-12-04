@@ -1,0 +1,45 @@
+package com.justyou.justme.domains.resume.model.entity;
+
+import com.justyou.justme.domains.resume.dto.WorkExperienceDto;
+import lombok.*;
+
+import javax.persistence.*;
+import java.time.LocalDate;
+
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity(name = "WORKEXPERIENCE")
+public class WorkExperience{
+    //외부 링크
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "resume_id")
+    private Resume resume;
+    private String workExperienceCompanyName; //회사명
+    private String workExperienceDepartment; //부서
+    private String workExperiencePosition; //역할(포지션)
+    private String workExperienceTitle; //제목
+    private String workExperienceText; //내용
+    private LocalDate workExperienceStartDt; //시작일
+    private LocalDate workExperienceEndDt; //종료일
+
+    public static WorkExperience of(WorkExperienceDto dto, Resume resume){
+        return WorkExperience.builder()
+                .resume(resume)
+                .workExperienceCompanyName(dto.getWorkExperienceCompanyName())
+                .workExperienceDepartment(dto.getWorkExperienceDepartment())
+                .workExperiencePosition(dto.getWorkExperiencePosition())
+                .workExperienceTitle(dto.getWorkExperienceTitle())
+                .workExperienceText(dto.getWorkExperienceText())
+                .workExperienceStartDt(dto.getWorkExperienceStartDt())
+                .workExperienceEndDt(dto.getWorkExperienceEndDt())
+                .build();
+    }
+
+}

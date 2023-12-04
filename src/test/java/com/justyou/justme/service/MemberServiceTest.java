@@ -1,15 +1,16 @@
 package com.justyou.justme.service;
 
-import com.justyou.justme.component.MailComponent;
-import com.justyou.justme.dto.MemberDto;
-import com.justyou.justme.dto.RequestMemberSignUpDto;
-import com.justyou.justme.dto.ResponseUserDto;
-import com.justyou.justme.dto.UserDto;
-import com.justyou.justme.exception.CustomException;
-import com.justyou.justme.exception.ErrorCode;
-import com.justyou.justme.model.entity.MySQL.Member;
-import com.justyou.justme.model.repository.MemberRepository;
-import com.justyou.justme.model.repository.WithdrawalMemberRepository;
+import com.justyou.justme.base.component.MailComponent;
+import com.justyou.justme.domains.member.dto.MemberDto;
+import com.justyou.justme.domains.member.dto.RequestMemberSignUpDto;
+import com.justyou.justme.domains.member.dto.ResponseUserDto;
+import com.justyou.justme.domains.member.dto.UserDto;
+import com.justyou.justme.base.exception.CustomException;
+import com.justyou.justme.base.exception.ErrorCode;
+import com.justyou.justme.domains.member.model.entity.Member;
+import com.justyou.justme.domains.member.model.repository.MemberRepository;
+import com.justyou.justme.domains.member.model.repository.WithdrawalMemberRepository;
+import com.justyou.justme.domains.member.service.MemberService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -25,7 +26,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import static com.justyou.justme.UserCode.MemberCode.MEMBER_STATUS_ING;
+import static com.justyou.justme.base.utils.MemberCode.MEMBER_STATUS_ING;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
